@@ -1,0 +1,2 @@
+PROJECT_NAME=wrizzle
+TAILWIND=on
