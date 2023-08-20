@@ -8,10 +8,10 @@ function render() {
     echo "<div class='text-center'>"
     while read -rn1 char; do
       if [[ "$char" != "" ]]; then
-        GRAY=bg-gray-500
+        GRAY="dark:bg-gray-500 bg-gray-300 font-bold"
         if grep -q "$char" data/guess; then
           if ! grep -q "$char" data/wordoftheday; then
-            GRAY=bg-gray-800
+            GRAY="dark:bg-gray-800 bg-gray-500 text-white"
           fi
         fi
         echo "<span class='align-middle leading-9 mt-1 w-7 h-9 rounded-md $GRAY inline-block text-center'>$char</span>"
