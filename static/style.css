@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-  
-  margin: 0;
-  padding: 0;
+html,
+body {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
 }
 #signature {
   position: absolute;
