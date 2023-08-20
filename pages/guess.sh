@@ -6,10 +6,13 @@ function error() {
 }
 
 GUESS_COUNT=$(wc -l data/guess | cut -d' ' -f1)
+LAST_GUESS=$(tail -n1 data/guess)
 
 if [[ "$REQUEST_METHOD" == "POST" ]]; then
   GUESS=$(echo "${FORM_DATA[guess]}" | sed 's/[^a-zA-Z]//g' | tr '[:lower:]' '[:upper:]' )
-  if [[ "$GUESS_COUNT" -gt 5 ]]; then
+  if [[ "$LAST_GUESS" == "$WORD" ]]; then
+    error "You already won! stop guessing"
+  elif [[ "$GUESS_COUNT" -gt 5 ]]; then
     error "You are out of guesses!"
   elif [[ "${#GUESS}" != 5 ]]; then
     error "Your guess must be 5 letters!"
