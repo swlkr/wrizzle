@@ -8,3 +8,4 @@ fi
 
 header "HX-Redirect" "/"
 end_headers
+end_headers
