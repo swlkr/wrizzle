@@ -4,9 +4,11 @@ WORD=$(cat data/wordoftheday)
 function error() {
     ERROR='<p class="text-red-500" id="error" hx-swap-oob="true">'"$1"'</p>'
 }
+
+GUESS_COUNT=$(wc -l data/guess | cut -d' ' -f1)
+
 if [[ "$REQUEST_METHOD" == "POST" ]]; then
   GUESS=$(echo "${FORM_DATA[guess]}" | sed 's/[^a-zA-Z]//g' | tr '[:lower:]' '[:upper:]' )
-  GUESS_COUNT=$(wc -l data/guess | cut -d' ' -f1)
   if [[ "$GUESS_COUNT" -gt 5 ]]; then
     error "You are out of guesses!"
   elif [[ "${#GUESS}" != 5 ]]; then
@@ -24,13 +26,14 @@ fi
 
 if [[ "$INTERNAL_REQUEST" != "true" ]]; then
   FORM=$(component '/form')
+  KEYBOARD=$(component '/keyboard')
 fi
 
 function render() {
     local TYPE
     local CLASS
     while IFS= read -r line; do
-        echo -n "<div>"
+        echo -n "<div class='justify-center flex gap-1'>"
         INDEX=0
         WRONG_LETTERS=""
         OUTPUT=""
@@ -61,7 +64,7 @@ function render() {
                 else
                     CLASS="bg-gray-500"
                 fi
-                echo "<span class='inline-block text-center rounded-md h-6 w-6 $CLASS'>$LETTER</span>"
+                echo "<span class='inline-block text-center align-middle leading-9 rounded-md h-9 w-9 $CLASS'>$LETTER</span>"
             fi
         done < <(echo "$OUTPUT")
         echo -n "</div>"
@@ -69,8 +72,19 @@ function render() {
 }
 
 GUESSES="$(cat data/guess | render)"
+BLANK_COUNT=$(( 6 - GUESS_COUNT ))
+BLANKS=""
+for i in $(seq 1 $BLANK_COUNT); do
+  BLANKS+="<div class='justify-center flex gap-1'>"
+    for j in {1..5}; do
+      BLANKS+="<span class='inline-block text-center align-middle leading-9 rounded-md h-9 w-9 border-2 border-gray-800'>&nbsp;</span>"
+    done
+  BLANKS+="</div>"
+done
 htmx_page << EOF
   ${ERROR}
   ${FORM}
   ${GUESSES}
+  ${BLANKS}
+  ${KEYBOARD}
 EOF
