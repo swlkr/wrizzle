@@ -5,7 +5,7 @@ RESET_BUTTON='<button hx-post="/reset" hx-swap="none" class="bg-green-500 hover:
 
 GUESS_FORM="
 <input autofocus type='text' name=guess id=guess placeholder='guess here' class='uppercase dark:bg-gray-800 bg-gray-200' autocomplete='off'></input>
-<button _='on htmx:afterRequest get #guess then put '' into its value' type='submit' hx-post='/guess' hx-swap='none' class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Guess</button>
+<button _=\"on htmx:afterRequest get #guess then put '' into its value\" type='submit' hx-post='/guess' hx-swap='none' class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Guess</button>
 "
 
 LAST_GUESS=$(tail -n1 data/guess)
