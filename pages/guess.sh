@@ -62,9 +62,9 @@ function render() {
                     WRONG_LETTERS=${WRONG_LETTERS/$LETTER}
                     CLASS="bg-yellow-500"
                 else
-                    CLASS="bg-gray-500"
+                    CLASS="dark:bg-gray-500 bg-gray-300"
                 fi
-                echo "<span class='inline-block text-center align-middle leading-9 rounded-md h-9 w-9 $CLASS'>$LETTER</span>"
+                echo "<span class='font-bold inline-block text-center align-middle leading-9 rounded-md h-9 w-9 $CLASS'>$LETTER</span>"
             fi
         done < <(echo "$OUTPUT")
         echo -n "</div>"
@@ -77,7 +77,7 @@ BLANKS=""
 for i in $(seq 1 $BLANK_COUNT); do
   BLANKS+="<div class='justify-center flex gap-1'>"
     for j in {1..5}; do
-      BLANKS+="<span class='inline-block text-center align-middle leading-9 rounded-md h-9 w-9 border-2 border-gray-800'>&nbsp;</span>"
+      BLANKS+="<span class='inline-block text-center align-middle leading-9 rounded-md h-9 w-9 border-2 dark:border-gray-800 border-gray-300'>&nbsp;</span>"
     done
   BLANKS+="</div>"
 done
