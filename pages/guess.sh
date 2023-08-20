@@ -15,13 +15,16 @@ if [[ "$REQUEST_METHOD" == "POST" ]]; then
     error "Your guess must be a real word!"
   else
     echo "$GUESS" >> data/guess
+    event guess | publish game
     if [[ "$GUESS" == "$WORD" ]]; then
         error ""
     fi
   fi
-  FORM=$(component '/form')
 fi
 
+if [[ "$INTERNAL_REQUEST" != "true" ]]; then
+  FORM=$(component '/form')
+fi
 
 function render() {
     local TYPE
