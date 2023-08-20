@@ -1,19 +1,29 @@
 
 WORD=$(cat data/wordoftheday)
 
+function error() {
+    ERROR='<p class="text-red-500" id="error" hx-swap-oob="true">'"$1"'</p>'
+}
 if [[ "$REQUEST_METHOD" == "POST" ]]; then
   GUESS=$(echo "${FORM_DATA[guess]}" | sed 's/[^a-zA-Z]//g' | tr '[:lower:]' '[:upper:]' )
   GUESS_COUNT=$(wc -l data/guess | cut -d' ' -f1)
-  if [[ "${#GUESS}" == 5 ]] && [[ "$GUESS_COUNT" -lt 6 ]]; then
+  if [[ "$GUESS_COUNT" -gt 5 ]]; then
+    error "You are out of guesses!"
+  elif [[ "${#GUESS}" != 5 ]]; then
+    error "Your guess must be 5 letters!"
+  elif ! grep -q "$GUESS" static/guessable-words; then
+    error "Your guess must be a real word!"
+  else
     echo "$GUESS" >> data/guess
     if [[ "$GUESS" == "$WORD" ]]; then
-        YOU_WIN='<p id="win" hx-swap-oob="true">You win!</p>'
+        error ""
     fi
   fi
+  FORM=$(component '/form')
 fi
 
 
-function something() {
+function render() {
     local TYPE
     local CLASS
     while IFS= read -r line; do
@@ -25,7 +35,7 @@ function something() {
             if [[ "$char" != "" ]]; then
                 RIGHT_LETTER=${WORD:$INDEX:1}
                 ((INDEX++))
-                if [[ "$RIGHT_LETTER" == "$char" ]]; then 
+                if [[ "$RIGHT_LETTER" == "$char" ]]; then
                     TYPE="right"
                 else
                     WRONG_LETTERS+="$RIGHT_LETTER"
@@ -37,12 +47,12 @@ function something() {
             fi
         done < <(echo "$line")
         while IFS= read -r letter_string; do
-            if [[ "$letter_string" != "" ]]; then 
+            if [[ "$letter_string" != "" ]]; then
                 LETTER=${letter_string:0:1}
                 TYPE=${letter_string:2}
-                if [[ "$TYPE" == "right" ]]; then 
+                if [[ "$TYPE" == "right" ]]; then
                     CLASS="bg-green-500"
-                elif [[ "$WRONG_LETTERS" =~ $LETTER ]]; then 
+                elif [[ "$WRONG_LETTERS" =~ $LETTER ]]; then
                     WRONG_LETTERS=${WRONG_LETTERS/$LETTER}
                     CLASS="bg-yellow-500"
                 else
@@ -55,8 +65,9 @@ function something() {
     done
 }
 
-GUESSES="$(cat data/guess | something)"
+GUESSES="$(cat data/guess | render)"
 htmx_page << EOF
-  ${YOU_WIN}
+  ${ERROR}
+  ${FORM}
   ${GUESSES}
 EOF

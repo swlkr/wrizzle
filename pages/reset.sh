@@ -1,3 +1,4 @@
+# headers
 if [[ "$REQUEST_METHOD" != "POST" ]]; then
   # only allow POST to this endpoint
   return $(status_code 405)
@@ -6,10 +7,6 @@ fi
 rm data/guess
 touch data/guess
 
-cat /usr/share/dict/american-english \
-| tr '[:lower:]' '[:upper:]' \
-| egrep '^[A-Z]{5}$' \
-| shuf \
-| head -n1 > data/wordoftheday
+shuf -n1 static/words > data/wordoftheday
 
-component '/guess'
+header "HX-Redirect" "/"

@@ -8,14 +8,8 @@ htmx_page << EOF
       <div id="guesses">
         $(component '/guess')
       </div>
-      <form id="win">
-        <input type="text" name=guess placeholder="guess here" class="uppercase"></input>
-
-      
-        <button type="submit" hx-post="/guess" hx-target="#guesses" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Guess</button>
-        <button hx-post="/reset" hx-target="#guesses" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Reset</button>
-      </form>
-      </form>
+        <p id="error"></p>
+        $(component '/form')
     </div>
   </div>
 EOF
