@@ -7,3 +7,4 @@ if [[ "$REQUEST_METHOD" == "POST" ]]; then
 fi
 
 header "HX-Redirect" "/"
+end_headers

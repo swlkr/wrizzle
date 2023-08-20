@@ -535,6 +535,7 @@ export -f subscribe
 export -f unsubscribe
 export -f publish
 export -f header
+export -f end_headers
 export -f event
 export -f htmx_page
 export -f findPredefinedRoutes
