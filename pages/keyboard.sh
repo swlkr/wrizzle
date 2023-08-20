@@ -10,7 +10,9 @@ function render() {
       if [[ "$char" != "" ]]; then
         GRAY=bg-gray-500
         if grep -q "$char" data/guess; then
-          GRAY=bg-gray-800
+          if ! grep -q "$char" data/wordoftheday; then
+            GRAY=bg-gray-800
+          fi
         fi
         echo "<span class='align-middle leading-9 mt-1 w-7 h-9 rounded-md $GRAY inline-block text-center'>$char</span>"
       fi
